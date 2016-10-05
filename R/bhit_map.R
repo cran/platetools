@@ -14,9 +14,8 @@
 #'
 #' @return ggplot plot
 #'
-#' @import dplyr
 #' @import ggplot2
-#' @import RColorBrewer
+#' @importFrom RColorBrewer brewer.pal
 #'
 #' @export
 #'
@@ -41,14 +40,8 @@ bhit_map <- function(data, well,
     # ensure data is ordered properly before passing to matrix()
     platemap <- platemap[order(platemap$Row, platemap$Column), ]
 
-    if (length(well) > plate){
-        warning("Invalid plate selection. The data given has more rows then number of wells. \nAre you sure argument 'plate' is correct for the number of wells in your data? \nnote: Default is a 96-well plate.",
-                call. = FALSE)
-    }
-    if (plate > 2 * length(well)){
-        warning("Invalid plate selection. The data given has more rows then number of wells. \nAre you sure argument 'plate' is correct for the number of wells in your data? \nnote: Default is a 96-well plate.",
-                call. = FALSE)
-    }
+    check_plate_input(well, plate)
+
     if (plate == 96L){
         # transform into 12*8 matrix (96-well plate)
         # fills matrix in a row-wise fashion i.e, A01, A02 ...
@@ -65,17 +58,18 @@ bhit_map <- function(data, well,
                                 byrow = TRUE)
     } else if (plate == 1536L){
 	mat_plate_map <- matrix(data,
-				nrow = 32,
-				ncol = 24,
-				byrow = TRUE)
+				            nrow = 32,
+				            ncol = 24,
+				            byrow = TRUE)
     } else{
-        stop("Not a plate format. \nArgument 'plate' should be 96, 384 or 1536.",
+        stop("Not a plate format.\nArgument 'plate' should be 96, 384 or 1536.",
              call. = FALSE)
     }
 
     # median polish of the data
     data_pol <- medpolish(mat_plate_map,
-                          na.rm = TRUE)
+                          na.rm = TRUE,
+                          trace.iter=FALSE)
 
     # transpose of residual matrix (as counts in column-wise fashion)
     # now well numbers correspond i.e t_out[12] = A12, t_out[13] = B01
@@ -96,13 +90,13 @@ bhit_map <- function(data, well,
     # change residuals from factor to numeric
     df$residual <- as.numeric(as.character(df$residual))
 
-    platemap$values <- scale(df$residual)
+    platemap$values <- scale(df$residual)[,]
     platemap$hit <- NA
 
     # calculate whether values are beyond the threshold; defined as hit or null
     for (row in 1:nrow(platemap)){
         if (platemap[row, 'values'] > threshold){platemap$hit[row] <- "hit"
-        } else  if (platemap[row, 'values'] < (-1 * threshold)){platemap$hit[row] <- "neg_hit"
+        } else if (platemap[row, 'values'] < (-1*threshold)){platemap$hit[row] <- "neg_hit"
         } else {platemap$hit[row] <- "null"}
     }
 
@@ -123,18 +117,13 @@ bhit_map <- function(data, well,
     } else if (plate == 384){
         # produce a 384-well plate map layout in ggplot
         plt <- plt384(platemap) +
-
             scale_fill_manual("hit", values = my_colours) +
             theme_bw()
     } else if (plate == 1536L){
-	plt <- plt1536(platemap) + 
-	    scale_fill_manual("hit", values = my_colours) +
-	    theme_bw()
+        plt <- plt1536(platemap) +
+	       scale_fill_manual("hit", values = my_colours) +
+	       theme_bw()
     } else stop("Not a valid plate format. Either 96 or 384.", call. = FALSE)
-
-    if (length(well) > plate) {
-        stop("Invalid plate selection. The data given has more rows than the number of wells. \nAre you sure argument 'plate' is correct for the number of wells in your data? \nnote: Default is set to a 96-well plate.")
-    }
 
     return(plt)
 }
