@@ -40,12 +40,12 @@
 
 
 hit_grid <- function(data, well,
-                   plate_id,
-                   threshold = 2,
-                   ncols = 2,
-                   plate = 96,
-                   each = FALSE,
-                   palette = "Spectral"){
+                    plate_id,
+                    threshold = 2,
+                    ncols = 2,
+                    plate = 96,
+                    each = FALSE,
+                    palette = "Spectral"){
 
     # normalised across entire range of values
     platemap <- plate_map_grid_scale(data, well, plate_id, each)
@@ -53,9 +53,12 @@ hit_grid <- function(data, well,
 
     # calculate whether values are beyond the threshold; defined as hit or null
     for (row in 1:nrow(platemap)){
-        if (platemap[row, 'values'] > threshold){platemap$hit[row] <- "hit"
-        } else  if (platemap[row, 'values'] < (-1 * threshold)){platemap$hit[row] <- "neg_hit"
-        } else {platemap$hit[row] <- "null"}
+        if (platemap[row, 'values'] > threshold) {
+            platemap$hit[row] <- "hit"
+        } else if (platemap[row, 'values'] < (-1 * threshold)) {
+            platemap$hit[row] <- "neg_hit"
+        } else {
+            platemap$hit[row] <- "null"}
     }
 
     # change name of hit to values
@@ -73,8 +76,8 @@ hit_grid <- function(data, well,
       plt <- plt96(platemap) +
           scale_fill_manual("hit", values = my_colours) +
           theme_bw() +
-          theme(panel.margin.x = unit(1, "lines"),
-          panel.margin.y = unit(0.5, "lines")) + # increase spacing between facets
+          theme(panel.spacing.x = unit(1, "lines"),
+          panel.spacing.y = unit(0.5, "lines")) + # increase spacing between facets
           facet_wrap(~plate_label,
                      ncol = ncols,
                      scales = 'free')
@@ -83,20 +86,20 @@ hit_grid <- function(data, well,
       plt <- plt384(platemap) +
           scale_fill_manual("hit", values = my_colours) +
           theme_bw() +
-          theme(panel.margin.x = unit(1, "lines"),
-          panel.margin.y = unit(0.5, "lines")) + # increase spacing between facets
+          theme(panel.spacing.x = unit(1, "lines"),
+          panel.spacing.y = unit(0.5, "lines")) + # increase spacing between facets
           facet_wrap(~plate_label,
                      ncol = ncols,
                      scales = 'free')
     } else if (plate == 1536L){
-	plt <- plt1536(platemap) +
-	    scale_fill_manual("hit", values = my_colours) +
-	    theme_bw() +
-	    theme(panel.margin.x = unit(1, "lines"),
-	    panel.margin.y = unit(0.5, "lines")) # increase spacing between facets
-	    facet_wrap(~plate_label,
-			ncol = ncols,
-			scales = "free")
+    plt <- plt1536(platemap) +
+        scale_fill_manual("hit", values = my_colours) +
+        theme_bw() +
+        theme(panel.spacing.x = unit(1, "lines"),
+        panel.spacing.y = unit(0.5, "lines")) # increase spacing between facets
+        facet_wrap(~plate_label,
+                   ncol = ncols,
+                   scales = "free")
     } else stop("Not a valid plate format. Enter either 96, 384 or 1536.", call. = FALSE)
 
   return(plt)
