@@ -51,4 +51,3 @@ hit_grid(data = df$vals,
     plate = 96,
     each = FALSE)
 }
-

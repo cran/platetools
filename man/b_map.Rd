@@ -39,4 +39,3 @@ b_map(data = df_384$vals,
      well = df_384$well,
      plate = 384)
 }
-

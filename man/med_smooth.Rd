@@ -21,4 +21,3 @@ a dataframe with after values have been transformed into
 a matrix mirroring the plate structure and undergoing a
 2-way median polish to remove row or column effects
 }
-
