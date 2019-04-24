@@ -11,9 +11,12 @@
 #'  for a well to be classified as a 'hit'. Default it +/- 2 SD
 #' @param ncols Number of columns in the grid of plates
 #' @param plate Number of wells in the complete plates (96, 384 or 1536)
-#' @param each boolean, if true scales each plate individually, if false will
-#'     scale the pooled values of \code{data}
+#' @param scale_each boolean, if true scales each plate individually, if false
+#'      will scale the pooled values of \code{data}
+#' @param each boolean, allowed for backwards compatibility, \code{scale_each}
+#'      is now the preferred argument name
 #' @param palette RColorBrewer palette
+#' @param ... additional arguments for plot wrappers
 #'
 #' @return ggplot plot
 #'
@@ -39,16 +42,19 @@
 #'     each = FALSE)
 
 
-hit_grid <- function(data, well,
-                    plate_id,
-                    threshold = 2,
-                    ncols = 2,
-                    plate = 96,
-                    each = FALSE,
-                    palette = "Spectral"){
+hit_grid <- function(data, well, plate_id, threshold = 2, ncols = 2, plate = 96,
+                    each = FALSE, scale_each = FALSE, palette = "Spectral", ...){
+
+    # handle deprecated `each` argument
+    # if `each` argument is used then raise a warning but set `scale_each` to use
+    # the value passed to each and run anyway
+    if (!missing(each)) {
+        warning("argument 'each' has been deprecated, you should use 'scale_each' in the future")
+        scale_each <- each
+    }
 
     # normalised across entire range of values
-    platemap <- plate_map_grid_scale(data, well, plate_id, each)
+    platemap <- plate_map_grid_scale(data, well, plate_id, scale_each)
     platemap$hit <- NA
 
     # calculate whether values are beyond the threshold; defined as hit or null
@@ -70,30 +76,30 @@ hit_grid <- function(data, well,
     my_cols <- brewer.pal(3, palette)
     my_colours <- c(hit = my_cols[1], neg_hit = my_cols[3], null = my_cols[2])
 
-
     if (plate == 96L){
-      # produce a 96-well plate map layout in ggplot
-      plt <- plt96(platemap) +
+      plt <- plt96(platemap, ...) +
           scale_fill_manual("hit", values = my_colours) +
           theme_bw() +
           theme(panel.spacing.x = unit(1, "lines"),
-          panel.spacing.y = unit(0.5, "lines")) + # increase spacing between facets
+                panel.spacing.y = unit(0.5, "lines")) + # increase spacing between facets
           facet_wrap(~plate_label, ncol = ncols)
+
       } else if (plate == 384L){
-      # produce a 384-well plate map layout in ggplot
-      plt <- plt384(platemap) +
+      plt <- plt384(platemap, ...) +
           scale_fill_manual("hit", values = my_colours) +
           theme_bw() +
           theme(panel.spacing.x = unit(1, "lines"),
-          panel.spacing.y = unit(0.5, "lines")) + # increase spacing between facets
+               panel.spacing.y = unit(0.5, "lines")) + # increase spacing between facets
           facet_wrap(~plate_label, ncol = ncols)
+
     } else if (plate == 1536L){
-    plt <- plt1536(platemap) +
+    plt <- plt1536(platemap, ...) +
         scale_fill_manual("hit", values = my_colours) +
         theme_bw() +
         theme(panel.spacing.x = unit(1, "lines"),
-        panel.spacing.y = unit(0.5, "lines")) # increase spacing between facets
+              panel.spacing.y = unit(0.5, "lines")) # increase spacing between facets
         facet_wrap(~plate_label, ncol = ncols)
+
     } else stop("Not a valid plate format. Enter either 96, 384 or 1536.", call. = FALSE)
 
   return(plt)

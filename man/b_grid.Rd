@@ -4,7 +4,8 @@
 \alias{b_grid}
 \title{Plots multiple b-scored normalised platemaps}
 \usage{
-b_grid(data, well, plate_id, plate = 96)
+b_grid(data, well, plate_id, plate = 96, eps = 0.01, maxiter = 10,
+  trace.iter = FALSE, na.rm = FALSE, ...)
 }
 \arguments{
 \item{data}{Numerical values to be plotted}
@@ -14,6 +15,16 @@ b_grid(data, well, plate_id, plate = 96)
 \item{plate_id}{Vector of plate identifiers e.g "Plate_1"}
 
 \item{plate}{Number of wells in complete plate (96, 384 or 1536)}
+
+\item{eps}{real number greater than 0. A tolerance for divergence}
+
+\item{maxiter}{int, the maximum number of iterations}
+
+\item{trace.iter}{Boolean, should progress in convergence be reported?}
+
+\item{na.rm}{Boolean, should missing values be removed?}
+
+\item{...}{additional parameters to plot wrappers}
 }
 \value{
 ggplot plot
@@ -26,17 +37,17 @@ normalised values in the form of microtitre plates. Works for 96, 384 and
 }
 \examples{
 df01 <- data.frame(well = num_to_well(1:96),
-  vals = rnorm(96),
-  plate = 1)
+                   vals = rnorm(96),
+                   plate = 1)
 
 df02 <- data.frame(well = num_to_well(1:96),
-  vals = rnorm(96),
-  plate = 2)
+                   vals = rnorm(96),
+                   plate = 2)
 
 df <- rbind(df01, df02)
 
 b_grid(data = df$vals,
-    well = df$well,
-    plate_id = df$plate,
-    plate = 96)
+       well = df$well,
+       plate_id = df$plate,
+       plate = 96)
 }

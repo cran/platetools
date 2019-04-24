@@ -7,8 +7,6 @@
 #' @param plate Number of wells in complete plate (96, 384 or 1536)
 #' @param well Column containing well identifiers i.e "A01"
 #'
-#' @importFrom plyr rbind.fill
-#'
 #' @return dataframe
 #'
 #' @export
@@ -21,14 +19,11 @@
 
 fill_plate <- function(df, well, plate = 96) {
 
-    # useful 'not in' function
-    '%!in%' <- function(x,y)!('%in%'(x,y))
 
     # TODO: if passed the column name that's not a string,
     # should be able to subset anyway
     if (!is.character(well)) {
-        stop("'well' should be a string of the column name",
-             call. = FALSE)
+        stop("'well' should be a string of the column name", call. = FALSE)
     }
 
     # check inputs
@@ -51,7 +46,7 @@ fill_plate <- function(df, well, plate = 96) {
     well_col <- df[, well]
 
     # all wells in a complete plate
-    complete_plate <- num_to_well(1:plate)
+    complete_plate <- num_to_well(1:plate, plate=plate)
 
     # wells in complete plate that are not in 'well'
     missing_indices <- which(complete_plate %!in% well_col)
@@ -59,6 +54,28 @@ fill_plate <- function(df, well, plate = 96) {
 
     missing_df <- data.frame(missing_wells) # dataframe of just missing wells
     names(missing_df) <- eval(substitute(well)) # name column after original well column
-    filled_df <- rbind.fill(df, missing_df) # rbind, fill rows with NAs
+    filled_df <- rbind_fill(df, missing_df) # rbind, fill rows with NAs
     return(filled_df)
+}
+
+
+# useful 'not in' function
+'%!in%' <- function(x,y)!('%in%'(x,y))
+
+
+rbind_fill <- function(x, y) {
+    # fill in missing column in y with NA values
+    if (nrow(y) == 0) {
+        return(x)
+    }
+    x_names <- colnames(x)
+    y_names <- colnames(y)
+    for (col_name in x_names) {
+        # if column not found in y, then add it as all NAs
+        if (col_name %!in% y_names) {
+            y[, col_name] <- NA
+        }
+    }
+    # now the two dataframes should be able to be rbind together
+    rbind(x, y)
 }

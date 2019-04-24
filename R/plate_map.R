@@ -5,7 +5,6 @@
 #' @param data numeric data to be used as colour scale
 #' @param well alpha-numeric well IDs, e.g 'A01'
 #' @return dataframe
-#' @import dplyr
 #' @export
 
 plate_map <- function(data, well){
@@ -15,19 +14,16 @@ plate_map <- function(data, well){
 
     # if not a 1536 well plate, we can just convert well labels to numbers
     if (!is_1536(well)){
-        platemap <- mutate(platemap,
-        Row = as.numeric(match(toupper(substr(well, 1,1)), LETTERS)),
-        Column = as.numeric(substr(well, 2, 5)))
+        platemap$Row <-  as.numeric(match(toupper(substr(well, 1,1)), LETTERS))
+        platemap$Column <- as.numeric(substr(well, 2, 5))
     } else {
         # if a 1536 plate cannot convert the well labels directly to row and column
         # values as we have double well ID's, i.e 'AA' isn't a number
         Row <- as.numeric(match(toupper(substr(well, 1, 1)), LETTERS))
         add_to_row <- ifelse(nchar(as.character(well)) == 4, 26, 0)
         Row <- Row + add_to_row
-
-        platemap <- mutate(platemap,
-            Row = Row,
-            Column = as.numeric(substr(well, nchar(as.character(well)) - 1, 5)))
+        platemap$Row <- Row
+        platemap$Column <-  as.numeric(substr(well, nchar(as.character(well)) - 1, 5))
 
     }
     platemap['values'] <- data
@@ -77,19 +73,18 @@ plate_map_grid <- function(data, well, plate_id){
 #' @param each boolean, if true scales each plate individually, if false will
 #'     scale the pooled values of \code{data}
 #' @return dataframe
-#' @import dplyr
 #' @export
 
 plate_map_grid_scale <- function(data, well, plate_id, each){
     df <- plate_map_grid(data, well, plate_id)
-
     if (each == FALSE) {
         df$values <- scale(df$values)
     } else if (each == TRUE) {
-        df <- df %>% group_by_("plate_label") %>%
-            mutate_(values = "scale(values)[,]") %>% #STOP SCALE RETURNING STUPID ATTRIBUTES!
-            ungroup() %>%
-            as.data.frame()
+        split_df <- split(df, df$plate_label)
+        df <- do.call(
+            rbind,
+            Map(function(x) {scale(x$values) -> x$values; x}, split_df)
+        )
     }
     return(df)
 }
@@ -103,13 +98,11 @@ plate_map_grid_scale <- function(data, well, plate_id, each){
 #'
 #' @param data vector or dataframe of numeric data
 #' @param well vector of alphanumeric well IDs e.g 'A01'
-#' @import dplyr
 
 plate_map_multiple <- function(data, well){
     platemap <- as.data.frame(well)
-    platemap <- mutate(platemap,
-           Row = as.numeric(match(toupper(substr(well, 1, 1)), LETTERS)),
-              Column = as.numeric(substr(well, 2, 5)))
+    platemap$Row <- as.numeric(match(toupper(substr(well, 1, 1)), LETTERS))
+    platemap$Column <- as.numeric(substr(well, 2, 5))
     platemap_out <- data.frame(platemap, data)
     return(platemap_out)
 }

@@ -9,6 +9,11 @@
 #' @param well Vector of well identifiers e.g "A01"
 #' @param plate Number of wells in complete plate (96, 384 or 1536)
 #' @param plate_id Vector of plate identifiers e.g "Plate_1"
+#' @param eps real number greater than 0. A tolerance for divergence
+#' @param maxiter int, the maximum number of iterations
+#' @param trace.iter Boolean, should progress in convergence be reported?
+#' @param na.rm Boolean, should missing values be removed?
+#' @param ... additional parameters to plot wrappers
 #' @return ggplot plot
 #'
 #' @import ggplot2
@@ -16,27 +21,27 @@
 #'
 #' @examples
 #' df01 <- data.frame(well = num_to_well(1:96),
-#'   vals = rnorm(96),
-#'   plate = 1)
+#'                    vals = rnorm(96),
+#'                    plate = 1)
 #'
 #' df02 <- data.frame(well = num_to_well(1:96),
-#'   vals = rnorm(96),
-#'   plate = 2)
+#'                    vals = rnorm(96),
+#'                    plate = 2)
 #'
 #' df <- rbind(df01, df02)
 #'
 #' b_grid(data = df$vals,
-#'     well = df$well,
-#'     plate_id = df$plate,
-#'     plate = 96)
+#'        well = df$well,
+#'        plate_id = df$plate,
+#'        plate = 96)
 
-b_grid <- function(data, well, plate_id, plate = 96) {
+b_grid <- function(data, well, plate_id, plate = 96, eps = 0.01,
+                   maxiter = 10, trace.iter = FALSE, na.rm = FALSE, ...) {
 
     stopifnot(is.vector(data))
 
     # need to group_by plate_id, median polish, then return data.frame
     # that can be passed to ggplot and use raw_grid
-
     platemap <- plate_map_grid(data, well, plate_id)
 
     # force to factor
@@ -47,7 +52,8 @@ b_grid <- function(data, well, plate_id, plate = 96) {
 
     # apply med_smooth to each dataframe, split by plate_id
     med_smooth_list <- lapply(platemap_split, function(x){
-        med_smooth(x, plate = plate)
+        med_smooth(x, plate = plate, eps = eps, maxiter = maxiter,
+                   trace.iter = trace.iter, na.rm = na.rm)
     })
 
     # list to dataframe
@@ -56,7 +62,9 @@ b_grid <- function(data, well, plate_id, plate = 96) {
 
     raw_grid(data = med_smooth_df$residual,
              well = med_smooth_df$well,
-             plate_id = med_smooth_df$plate_label)
+             plate_id = med_smooth_df$plate_label,
+             plate = plate,
+             ...)
 }
 
 
