@@ -5,11 +5,151 @@
 #' @param platemap platemap dataframe produced by \code{plate_map}
 #' @param size int, size parameter for ggplot2::geom_point
 #' @param shape int, shape parameter for ggplot2::geom_point
+#' @param na_fill string, fill colour for na or missing values
+#' @param na_size_ratio float, size ratio for missing values, set to 1 for same
+#' size as normal values.
+#' @param na_alpha float, alpha transparancy for missing or na values
 #' @return ggplot object
 #' @import ggplot2
 #' @export
 
-plt96 <- function(platemap, size = 10, shape = 21){
+plt6 <- function(platemap, size = 50, shape = 21, na_fill = "white", na_alpha = 0.1, na_size_ratio = 0.9){
+    shape <- parse_shape(shape)
+    ylim <- c(2.5, 0.5)
+    if (is_old_ggplot()) {
+        ylim <- rev(ylim)
+    }
+    ggplot(data = platemap, aes_string(x = "Column", y = "Row")) +
+        geom_point(data = expand.grid(seq(1, 3), seq(1, 2)),
+                   aes_string(x = "Var1", y = "Var2"),
+                   color = "grey90", fill = na_fill, shape = shape, size = size * na_size_ratio, alpha = na_alpha) +
+        geom_point(aes_string(fill = "values"), colour = "gray20", shape = shape, size = size) +
+        coord_fixed(ratio = (4.75 / 3) / (3 / 2), xlim = c(0.5, 3.5), ylim = ylim) +
+        scale_y_reverse(breaks = seq(1, 2), labels = LETTERS[1:2]) +
+        scale_x_continuous(position = "top", breaks = seq(1, 3)) +
+        xlab("") +
+        ylab("")
+}
+
+
+#' ggplot plate object
+#'
+#' internal function
+#'
+#' @param platemap platemap dataframe produced by \code{plate_map}
+#' @param size int, size parameter for ggplot2::geom_point
+#' @param shape int, shape parameter for ggplot2::geom_point
+#' @param na_fill string, fill colour for na or missing values
+#' @param na_size_ratio float, size ratio for missing values, set to 1 for same
+#' size as normal values.
+#' @param na_alpha float, alpha transparancy for missing or na values
+#' @return ggplot object
+#' @import ggplot2
+#' @export
+
+plt12 <- function(platemap, size = 38, shape = 21, na_fill = "white", na_alpha = 0.1, na_size_ratio = 0.9){
+    shape <- parse_shape(shape)
+    ylim <- c(3.5, 0.5)
+    if (is_old_ggplot()) {
+        ylim <- rev(ylim)
+    }
+    ggplot(data = platemap, aes_string(x = "Column", y = "Row")) +
+        geom_point(data = expand.grid(seq(1, 4), seq(1, 3)),
+                   aes_string(x = "Var1", y = "Var2"),
+                   color = "grey90", fill = na_fill, shape = shape, size = size * na_size_ratio, alpha = na_alpha) +
+        geom_point(aes_string(fill = "values"), colour = "gray20", shape = shape, size = size) +
+        coord_fixed(ratio = (5.5 / 4) / (4 / 3), xlim = c(0.5, 4.5), ylim = ylim) +
+        scale_y_reverse(breaks = seq(1, 3), labels = LETTERS[1:3]) +
+        scale_x_continuous(position = "top", breaks = seq(1, 4)) +
+        xlab("") +
+        ylab("")
+}
+
+
+#' ggplot plate object
+#'
+#' internal function
+#'
+#' @param platemap platemap dataframe produced by \code{plate_map}
+#' @param size int, size parameter for ggplot2::geom_point
+#' @param shape int, shape parameter for ggplot2::geom_point
+#' @param na_fill string, fill colour for na or missing values
+#' @param na_size_ratio float, size ratio for missing values, set to 1 for same
+#' size as normal values.
+#' @param na_alpha float, alpha transparancy for missing or na values
+#' @return ggplot object
+#' @import ggplot2
+#' @export
+
+plt24 <- function(platemap, size = 26, shape = 21, na_fill = "white", na_size_ratio = 0.9, na_alpha = 0.1){
+    shape <- parse_shape(shape)
+    ylim <- c(4.5, 0.5)
+    if (is_old_ggplot()) {
+        ylim <- rev(ylim)
+    }
+    ggplot(data = platemap, aes_string(x = "Column", y = "Row")) +
+        geom_point(data = expand.grid(seq(1, 6), seq(1, 4)),
+                   aes_string(x = "Var1", y = "Var2"),
+                   color = "grey90", fill = na_fill, shape = shape, size = size * na_size_ratio, alpha = na_alpha) +
+        geom_point(aes_string(fill = "values"), colour = "gray20", shape = shape, size = size) +
+        coord_fixed(ratio = (8 / 6) / (5 / 4), xlim = c(0.5, 6.5), ylim = ylim) +
+        scale_y_reverse(breaks = seq(1, 4), labels = LETTERS[1:4]) +
+        scale_x_continuous(position = "top", breaks = seq(1, 6)) +
+        xlab("") +
+        ylab("")
+}
+
+
+#' ggplot plate object
+#'
+#' internal function
+#'
+#' @param platemap platemap dataframe produced by \code{plate_map}
+#' @param size int, size parameter for ggplot2::geom_point
+#' @param shape int, shape parameter for ggplot2::geom_point
+#' @param na_fill string, fill colour for na or missing values
+#' @param na_size_ratio float, size ratio for missing values, set to 1 for same
+#' size as normal values.
+#' @param na_alpha float, alpha transparancy for missing or na values
+#' @return ggplot object
+#' @import ggplot2
+#' @export
+
+plt48 <- function(platemap, size = 18, shape = 21, na_fill = "white", na_size_ratio = 0.9, na_alpha = 0.1){
+    shape <- parse_shape(shape)
+    ylim <- c(6.5, 0.5)
+    if (is_old_ggplot()) {
+        ylim <- rev(ylim)
+    }
+    ggplot(data = platemap, aes_string(x = "Column", y = "Row")) +
+        geom_point(data = expand.grid(seq(1, 8), seq(1, 6)),
+                   aes_string(x = "Var1", y = "Var2"),
+                   color = "grey90", fill = na_fill, shape = shape, size = size * na_size_ratio, alpha = na_alpha) +
+        geom_point(aes_string(fill = "values"), colour = "gray20", shape = shape, size = size) +
+        coord_fixed(ratio = (9 / 8) / (7 / 6), xlim = c(0.5, 8.5), ylim = ylim) +
+        scale_y_reverse(breaks = seq(1, 6), labels = LETTERS[1:6]) +
+        scale_x_continuous(position = "top", breaks = seq(1, 8)) +
+        xlab("") +
+        ylab("")
+}
+
+
+#' ggplot plate object
+#'
+#' internal function
+#'
+#' @param platemap platemap dataframe produced by \code{plate_map}
+#' @param size int, size parameter for ggplot2::geom_point
+#' @param shape int, shape parameter for ggplot2::geom_point
+#' @param na_fill string, fill colour for na or missing values
+#' @param na_size_ratio float, size ratio for missing values, set to 1 for same
+#' size as normal values.
+#' @param na_alpha float, alpha transparancy for missing or na values
+#' @return ggplot object
+#' @import ggplot2
+#' @export
+
+plt96 <- function(platemap, size = 10, shape = 21, na_fill = "white", na_size_ratio = 0.9, na_alpha = 0.1){
     shape <- parse_shape(shape)
     ylim <- c(8.5, 0.5)
     if (is_old_ggplot()) {
@@ -18,7 +158,7 @@ plt96 <- function(platemap, size = 10, shape = 21){
     ggplot(data = platemap, aes_string(x = "Column", y = "Row")) +
         geom_point(data = expand.grid(seq(1, 12), seq(1, 8)),
                    aes_string(x = "Var1", y = "Var2"),
-                   color = "grey90", fill = "white", shape = shape, size = size-4, alpha = 0.1) +
+                   color = "grey90", fill = na_fill, shape = shape, size = size * na_size_ratio, alpha = na_alpha) +
         geom_point(aes_string(fill = "values"), colour = "gray20", shape = shape, size = size) +
         coord_fixed(ratio = (13 / 12) / (9 / 8), xlim = c(0.5, 12.5), ylim = ylim) +
         scale_y_reverse(breaks = seq(1, 8), labels = LETTERS[1:8]) +
@@ -34,11 +174,15 @@ plt96 <- function(platemap, size = 10, shape = 21){
 #' @param platemap platemap dataframe produced by \code{plate_map}
 #' @param size int, size parameter for ggplot2::geom_point
 #' @param shape int, shape parameter for ggplot2::geom_point
+#' @param na_fill string, fill colour for na or missing values
+#' @param na_size_ratio float, size ratio for missing values, set to 1 for same
+#' size as normal values.
+#' @param na_alpha float, alpha transparancy for missing or na values
 #' @return ggplot object
 #' @import ggplot2
 #' @export
 
-plt384 <- function(platemap, size = 5, shape = 22){
+plt384 <- function(platemap, size = 5, shape = 22, na_fill = "white", na_size_ratio = 0.95, na_alpha = 0.1){
     shape <- parse_shape(shape)
     ylim <- c(16.5, 0.5)
     if (is_old_ggplot()) {
@@ -47,7 +191,7 @@ plt384 <- function(platemap, size = 5, shape = 22){
     ggplot(data = platemap, aes_string(x = "Column", y = "Row")) +
         geom_point(data = expand.grid(seq(1, 24), seq(1, 16)),
                    aes_string(x = "Var1", y = "Var2"),
-                   color = "grey90", fill = "white", shape = shape, size = size-2, alpha = 0.1) +
+                   color = "grey90", fill = na_fill, shape = shape, size = size * na_size_ratio, alpha = na_alpha) +
         geom_point(aes_string(fill = "values"), colour = "gray20", shape = shape, size = size) +
         coord_fixed(ratio = (24.5 / 24) / (16.5 / 16), xlim = c(0.5, 24.5), ylim = ylim) +
         scale_y_reverse(breaks = seq(1, 16), labels = LETTERS[1:16]) +
@@ -63,12 +207,16 @@ plt384 <- function(platemap, size = 5, shape = 22){
 #' @param platemap platemap dataframe produced by \code{plate_map}
 #' @param size int, size parameter for ggplot2::geom_point
 #' @param shape int, shape parameter for ggplot2::geom_point
+#' @param na_fill string, fill colour for na or missing values
+#' @param na_size_ratio float, size ratio for missing values, set to 1 for same
+#' size as normal values.
+#' @param na_alpha float, alpha transparancy for missing or na values
 #' @return ggplot object
 #' @import ggplot2
 #' @export
 
 
-plt1536 <- function(platemap, size = 3.5, shape = 22){
+plt1536 <- function(platemap, size = 3.5, shape = 22, na_fill = "white", na_size_ratio = 0.95, na_alpha = 0.1){
     shape <- parse_shape(shape)
     ylim <- c(32.5, 0.5)
     if (is_old_ggplot()) {
@@ -77,7 +225,7 @@ plt1536 <- function(platemap, size = 3.5, shape = 22){
     ggplot(data = platemap, aes_string(x = "Column", y = "Row")) +
     geom_point(data = expand.grid(seq(1, 48), seq(1, 32)),
                aes_string(x = "Var1", y = "Var2"),
-               color = "grey90", fill = "white", shape = shape, size = size-1.5, alpha = 0.1) +
+               color = "grey90", fill = na_fill, shape = shape, size = size * na_size_ratio, alpha = na_alpha) +
     geom_point(aes_string(fill = "values"), colour = "gray20", shape = shape, size = size) +
     coord_fixed(ratio = (48.25 / 48) / (32.25 / 32), xlim = c(0.5, 48.5), ylim = ylim) +
     scale_y_reverse(breaks = seq(1, 32)) +
