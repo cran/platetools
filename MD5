@@ -1,16 +1,16 @@
-4fe73eab9c088cecd0f6a28796ae783d *DESCRIPTION
+ea9de73d6f3ce0a9cc923f613b267164 *DESCRIPTION
 ec1e86b618d337c6298ed53782255fd2 *LICENSE
 bd524f2f2079be01c30834e72362b34d *NAMESPACE
 001ae716ea9ca31891fd02eee66bbe5d *R/b_grid.R
 323fcc7019346b717223721876f01939 *R/b_map.R
-6b0fd56c0f1acb7aaaaeaceeee2ffa96 *R/bhit_map.R
+c98abe51afcbe2c211c1bb86596033e0 *R/bhit_map.R
 397748b7d3677ced84da554f8e646fc3 *R/check_plate_input.R
 f1b0622e06dd5514fb451ddea5b2cd98 *R/data.R
 6e4ce1116708f9a381ffeeef14b6f08b *R/dist_map.R
 c2c320302ec76cd4745704623037ae1a *R/fill_plate.R
 5b87f018611755b403a3e07b9a3fc67a *R/hit_grid.R
-fa41363fec5c3d7004b29bf12662bd30 *R/hit_map.R
-762de6ef92ccdba1912acd0e2a5a0997 *R/med_smooth.R
+26cf24d2b643431b66a6f48e18997f5e *R/hit_map.R
+f38f80e16e895581936a57e601527f07 *R/med_smooth.R
 8f3aaaa4d6277237a8ec23ddf65030a9 *R/missing_wells.R
 532a905a30d5bb751859373c776074e2 *R/num_to_well.R
 3eae5725b2edf47bf28bac876e5d46db *R/pc_grid.R
@@ -31,7 +31,7 @@ bd9f6885165ed9403d131107afb3ea94 *R/z_grid.R
 985d3045e7342cd70012062bafd191b2 *data/readmap_data.rda
 1b2843ce75c39bb329f2e00c4de39140 *man/b_grid.Rd
 88ed6100953b4eda9e02d99c2a0a56e9 *man/b_map.Rd
-415a6e9f14fadf28568e42b008097742 *man/b_score.Rd
+470f12e8227d096e9de85b019156c211 *man/b_score.Rd
 76350d3dfbf2b314cf9824f0f6e47027 *man/bhit_map.Rd
 5db7c9435e62fd82270edbd4bada9ec9 *man/check_plate_input.Rd
 d00d67a220174e31924399b29ef0d06c *man/dist_map.Rd
@@ -42,7 +42,7 @@ be52ae7ddfe38a74f2db1493b2b812f7 *man/hit_grid.Rd
 c14ce449dd8d08ec4827df96672a505d *man/is_old_ggplot.Rd
 8ccce3e48eab4542a89dd33e6d788b1b *man/legend_title.Rd
 5dbbddea744f64e94aceb2867b8ff716 *man/list_to_dataframe.Rd
-70875de4b185877839d21dc3e1758435 *man/med_smooth.Rd
+5a42d0dbf3f2adfebef84dac99d4b2f9 *man/med_smooth.Rd
 e1bdffb79730a7a9b9d7f99cf8b5e441 *man/missing_wells.Rd
 efe9d5a1f46a212552ea90065743de6d *man/num_to_well.Rd
 7e175b360fad58c78dc541434ef289b3 *man/pc_grid.Rd
@@ -82,7 +82,7 @@ f65f89825a1dce2e38ba8d9447692a06 *tests/testthat/test-num_to_well.R
 17614c5031656c4b62acb10ddeac084b *tests/testthat/test-plate_effects.R
 10183b47815360ada58a2497872aa2a5 *tests/testthat/test-plate_map.R
 90dce08224c3f77ae4037971d48d395b *tests/testthat/test-plate_matrix.R
-56f696bfc490def1ec2bffd29cbbce21 *tests/testthat/test-plot_wrapper.R
+075a21ed5d2dcc51a0c527f74ee039f4 *tests/testthat/test-plot_wrapper.R
 4b599ade920b590fe75607e3f0f20f2b *tests/testthat/test-read_map.R
 48b206dacfdfca968021c8545d4509e9 *tests/testthat/test-rotate_plate.R
 b787bf6b79a09798472e37a4bd317344 *tests/testthat/test-set_block.R
